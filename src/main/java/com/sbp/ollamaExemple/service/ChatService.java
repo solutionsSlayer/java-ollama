@@ -16,8 +16,10 @@ public class ChatService {
     private final ConversationRepository conversationRepository;
     private final MessageRepository messageRepository;
 
-    public Conversation startNewConversation() {
-        return conversationRepository.save(new Conversation());
+    public Conversation startNewConversation(String key) {
+        Conversation conversation = new Conversation();
+        conversation.setConversationKey(key);
+        return conversationRepository.save(conversation);
     }
 
     public void addMessageToConversation(Conversation conversation, String content) {

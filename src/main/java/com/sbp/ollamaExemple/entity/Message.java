@@ -19,6 +19,10 @@ public class Message {
         this.content = content;
     }
 
+    public String getContent() {
+        return content;
+    }
+
     public void setConversation(Conversation conversation) {
         this.conversation = conversation;
     }
