@@ -1,4 +1,4 @@
-package com.sbp.ollamaExemple;
+package com.sbp.ollamaExemple.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;

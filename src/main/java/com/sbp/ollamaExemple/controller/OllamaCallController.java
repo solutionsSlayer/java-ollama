@@ -1,4 +1,4 @@
-package com.sbp.ollamaExemple;
+package com.sbp.ollamaExemple.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.messages.Message;
@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.sbp.ollamaExemple.service.FileReadingService;
+import com.sbp.ollamaExemple.service.ChatService;
+import com.sbp.ollamaExemple.entity.Conversation;
+
 import reactor.core.publisher.Flux;
 
 import java.util.ArrayList;
@@ -25,6 +30,7 @@ public class OllamaCallController {
 
     private final FileReadingService fileReadingService;
     private final OllamaChatModel chatModel;
+    private final ChatService chatService;
 
 
 
@@ -39,11 +45,14 @@ public class OllamaCallController {
 
         Prompt promptToSend = new Prompt(messages);
         Flux<ChatResponse> chatResponses = chatModel.stream(promptToSend);
-        String message = Objects.requireNonNull(chatResponses.collectList().block()).stream()
+        String messageContent = Objects.requireNonNull(chatResponses.collectList().block()).stream()
                 .map(response -> response.getResult().getOutput().getContent())
                 .collect(Collectors.joining("")) ;
 
-        return message ;
+        Conversation conversation = chatService.startNewConversation();
+        chatService.addMessageToConversation(conversation, messageContent);
+
+        return messageContent ;
 
     }
 
